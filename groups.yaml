@@ -1,0 +1,50 @@
+#This is the main display for the home automation and alarm system
+default_view:
+    view: yes
+    icon: mdi:home
+#what groups to show in the Home assistant
+    entities:
+      - group.Alarm
+      - group.Door
+      - group.Window
+      - group.Motion
+      - group.SmartSwitch
+      - group.DoorLock
+
+#groups for the arming and disarming
+Alarm:
+    name: Alarm
+    entities:
+      - alarm_control_panel.alarm_home
+
+#the front door group
+Door:
+    name: Door Sensor
+    entities:
+      - sensor.front_door
+
+#the window group
+Window:
+    name: Window Sensor
+    entities:
+      - sensor.window
+
+#the door lock group
+DoorLock:
+    name: Door Lock
+    entities:    
+      - lock.kwikset_touchpad_electronic_deadbolt_locked
+
+#the smart switch group
+SmartSwitch:
+    name: Smart Switch
+    entities:
+      - switch.aeotec_zw096_smart_switch_6_switch
+      - sensor.aeotec_zw096_smart_switch_6_voltage
+      
+#the motion sensor group
+Motion:
+    name: Motion Detector
+    entities:
+       - sensor.motion
+       - sensor.vision_zp3102_pir_motion_sensor_temperature
