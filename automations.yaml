@@ -1,0 +1,195 @@
+- id: action_push_message
+  alias: Door armed home notification
+  initial_state: 'on'
+  trigger:
+  - entity_id: sensor.front_door
+    from: CLOSED
+    platform: state
+    to: OPEN
+  action:
+  - data:
+      data:
+        action_data:
+          entity_id: sensor.front_door
+        push:
+          badge: 0
+          category: pushbuttons
+      message: door is open, armed stay
+    service: notify.ios_daniels_iphone
+  - data:
+      message: door is open. Armed Stay
+    service: notify.rob_alert
+  - data:
+      data:
+        action_data:
+          entity_id: sensor.front_door
+        push:
+          badge: 0
+          category: pushbuttons
+      message: door is open, armed stay
+    service: notify.ios_robzaga
+  condition:
+  - condition: state
+    entity_id: alarm_control_panel.alarm_home
+    state: armed_home
+
+
+####What happens when you push Ignore
+- id: push_notify_action
+  alias: 'Push Notify Action'
+  initial_state: 'on'
+  trigger:
+    - platform: event
+      event_type: ios.notification_action_fired
+      event_data:
+        actionName: IGNORE
+  action:
+    service: homeassistant.restart
+
+#####What happens when you push Sound the Alarm
+- id: push_notify_action_two
+  alias: 'Push Notify Action Two'
+  initial_state: 'on'
+  trigger:
+    - platform: event
+      event_type: ios.notification_action_fired
+      event_data:
+        actionName: SOUNDALARM
+  action:
+    service: homeassistant.restart
+
+
+  - data:
+      data:
+        action_data:
+          entity_id: sensor.window
+        push:
+          badge: 0
+          category: pushbuttons
+      message: window is open, armed away
+    service: notify.ios_daniels_iphone
+  - data:
+      message: window is open, Armed away
+    service: notify.dan_alert
+  - data:
+      data:
+        action_data:
+          entity_id: sensor.window
+        push:
+          badge: 0
+          category: pushbuttons
+      message: window is open, armed away
+    service: notify.ios_robzaga
+  alias: Window armed away notification
+  condition:
+  - condition: state
+    entity_id: alarm_control_panel.alarm_home
+    state: armed_away
+  trigger:
+  - entity_id: sensor.window
+    from: CLOSED
+    platform: state
+    to: OPEN
+
+
+- action:
+  - data:
+      data:
+        action_data:
+          entity_id: sensor.front_door
+        push:
+          badge: 0
+          category: pushbuttons
+      message: door is open, armed away
+    service: notify.ios_daniels_iphone
+  - data:
+      message: door is open. Armed away
+    service: notify.dan_alert
+  - data:
+      data:
+        action_data:
+          entity_id: sensor.front_door
+        push:
+          badge: 0
+          category: pushbuttons
+      message: door is open
+    service: notify.ios_robzaga
+  alias: Door armed away notification
+  condition:
+  - condition: state
+    entity_id: alarm_control_panel.alarm_home
+    state: armed_away
+  trigger:
+  - entity_id: sensor.front_door
+    from: CLOSED
+    platform: state
+    to: OPEN
+
+
+
+- action:
+  - data:
+      data:
+        action_data:
+          entity_id: sensor.motion
+        push:
+          badge: 0
+          category: pushbuttons
+      message: Motion was detected. Armed away
+    service: notify.ios_daniels_iphone
+  - data:
+      message: Motion is detected. Armed Away
+    service: notify.dan_alert
+  - data:
+      data:
+        action_data:
+          entity_id: sensor.motion
+        push:
+          badge: 0
+          category: pushbuttons
+      message: Motion was detected. Armed away
+    service: notify.ios_robzaga
+  alias: Motion armed away notification
+  condition:
+  - condition: state
+    entity_id: alarm_control_panel.alarm_home
+    state: armed_away
+  trigger:
+  - entity_id: sensor.vision_zp3102_pir_motion_sensor_burglar
+    from: '0'
+    platform: state
+    to: '8'
+
+
+- action:
+  - data:
+      data:
+        action_data:
+          entity_id: sensor.window
+        push:
+          badge: 0
+          category: pushbuttons
+      message: window is open, armed_home
+    service: notify.ios_daniels_iphone
+  - data:
+      message: window is open. Armed home
+    service: notify.dan_alert
+  - data:
+      data:
+        action_data:
+          entity_id: sensor.window
+        push:
+          badge: 0
+          category: pushbuttons
+      message: window is open, armed_home
+    service: notify.ios_robzaga
+  alias: Window armed_home notification
+  condition:
+  - condition: state
+    entity_id: alarm_control_panel.alarm_home
+    state: armed_home
+  trigger:
+  - entity_id: sensor.window
+    from: CLOSED
+    platform: state
+    to: OPEN
