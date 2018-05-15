@@ -1,0 +1,148 @@
+homeassistant:
+  # Name of the location where Home Assistant is running
+  name: UVU HOME
+  # metric for Metric, imperial for Imperial
+  unit_system: imperial
+  # Pick yours from here: http://en.wikipedia.org/wiki/List_of_tz_database_time_zones
+  time_zone: America/Denver
+
+# Customization file
+customize: !include customize.yaml
+
+  temperature_unit: F
+# Customization file for name changes and such
+customize: !include customize.yaml
+
+# customization file for the groups and tabs
+group: !include groups.yaml
+
+#including the automation file to the main configuration file
+#this includes the notifications
+automation: !include automations.yaml
+
+#A template for the front door sensor to show if open or closed
+sensor:
+  - platform: template
+    sensors:
+      front_door:
+          friendly_name: Front Door
+          entity_id:
+            - binary_sensor.zooz_zse08_contact_sensor_sensor
+          value_template: >-
+            {%- if is_state("binary_sensor.zooz_zse08_contact_sensor_sensor", "on") -%}
+            OPEN
+            {%- else -%}
+            CLOSED
+            {%- endif -%}
+          icon_template: >
+            {% if is_state('binary_sensor.zooz_zse08_contact_sensor_sensor', "on") %}
+            mdi:door-open
+            {% else %}
+            mdi:door-closed
+            {% endif %}
+      window:
+          friendly_name: Window
+          entity_id:
+            - binary_sensor.zooz_zse08_contact_sensor_sensor_3
+          value_template: >-
+            {%- if is_state("binary_sensor.zooz_zse08_contact_sensor_sensor_3", "on") -%}
+            OPEN
+            {%- else -%}
+            CLOSED
+            {%- endif -%}
+          icon_template: >
+            {% if is_state('binary_sensor.zooz_zse08_contact_sensor_sensor_3', 'on') %}
+            mdi:mdi:window-open
+            {% else %}
+            mdi:mdi:window-closed
+            {% endif %}
+
+
+      motion:
+         friendly_name: Motion
+         entity_id:
+           - sensor.vision_zp3102_pir_motion_sensor_burglar
+         value_template: >-
+           {%- if is_state("sensor.vision_zp3102_pir_motion_sensor_burglar", "8") -%}
+           DETECTED
+           {%- else -%}
+           READY
+           {%- endif -%}
+                  
+
+    
+#The alarm system. To manually set the alarm stay, away, or disarm
+#used for the notifications to work right
+alarm_control_panel:
+  - platform: manual
+    name: Alarm Home
+    code: 1111
+    pending_time: 0
+    trigger_time: 0
+    armed_away:
+      trigger_time: 0
+      pending_time: 15
+    armed_home:
+      pending_time: 0
+      trigger_time: 0
+
+
+# Enable frontend and creates new color themes
+frontend:
+  themes:
+    day:
+      primary-color: green
+    night:
+      primary-color: red
+
+# Enables configuration UI
+config:
+
+http:
+  base_url: https://URL:8123
+  api_password: password
+  ssl_certificate: location of the certificate
+  ssl_key: location of the certificate
+
+
+
+# Discover some devices automatically
+discovery:
+#for certain devices to ignore when discovering all
+  ignore:
+    - roku
+    - samsung_tv
+    - netgear_router
+    - apple_tv
+
+zwave:
+ usb_path: /dev/ttyACM0
+
+
+notify:
+ - name: Rob_Alert
+   platform: smtp
+   server: smtp.gmail.com
+   port: 587
+   sender: rob.bunzaga@gmail.com
+   starttls: 1
+   username: rob.bunzaga@gmail.com
+   password: RobDanielUA
+   recipient: rob.bunzaga@gmail.com
+
+
+
+ios:
+  push:
+    categories:
+      - name: pushbuttons
+        identifier: 'pushbuttons' 
+        actions:
+          - identifier: 'IGNORE'
+            title: 'Ignore'
+            activationMode: 'foreground'
+            authenticationRequired: yes
+          - identifier: 'SOUNDALARM'
+            title: 'Sound the Alarm!'
+            activationMode: 'foreground'
+            authenticationRequired: yes
