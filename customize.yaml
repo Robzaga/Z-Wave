@@ -1,0 +1,15 @@
+binary_sensor.zooz_zse08_contact_sensor_sensor:
+  friendly_name: Door Sensor
+
+binary_sensor.zooz_zse08_contact_sensor_sensor_3:
+  friendly_name: Window Sensor
+
+sensor.front_door:
+  icon: mdi:door
+
+sensor.window:
+  icon: mdi:mdi:window-closed
+
+sensor.aeotec_zw096_smart_switch_6_voltage:
+  icon: mdi:flash-circle
+  friendly_name: Smart Switch Voltage
